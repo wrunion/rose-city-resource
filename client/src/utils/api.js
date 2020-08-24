@@ -374,7 +374,7 @@ function handleError(error) {
 // EXPORTED HELPER UTILS ----------------------------------------------
 
 //function to generate query
-//for detaisl page
+//for details page
 export function detailsQueryBuilder(savedIds) {
   // if(savedIds.length===0){
   //   alert('No saved listings.')

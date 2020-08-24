@@ -26,6 +26,7 @@ class App extends React.Component {
     savedDataId: [],
   };
 
+  /* W.8.23.20 QUESTION: move this to Redux? */
   //state lisfted from
   //Cards to keep track of saved cards
   //this may need to be moved down to results
