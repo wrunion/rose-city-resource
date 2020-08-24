@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import MediaQuery from "react-responsive";
 import { NavLink } from "react-router-dom";
 import "./Nav.css";
@@ -41,83 +41,80 @@ const NavDrawer = ({ navVisible, onClick }) => (
   </CSSTransition>
 );
 
-class Nav extends React.Component {
-  state = {
-    navDrawerVisible: false,
+/* W.8.28 converted to functional component, add useState to monitor "navDrawerVisible" */
+const Nav = props => {
+  const [navDrawerVisible, setNavDrawer] = useState(false); 
+
+  const toggleDrawer = () => {
+    setNavDrawer(!navDrawerVisible);
   };
 
-  toggleDrawer = () => {
-    this.setState(() => ({ navDrawerVisible: !this.state.navDrawerVisible }));
-  };
-
-  logoDrawerToggle = () => this.setState(() => ({ navDrawerVisible: false }));
-
-  render() {
-    const { navDrawerVisible } = this.state;
-
-    return (
-      <div className="nav">
-        <header>
-          <nav className="nav-container">
-            <div className="sr-logo">
-              <a
-                target="_blank"
-                rel="noopener noreferrer"
-                href="https://news.streetroots.org/"
-                onClick={this.logoDrawerToggle}
-              >
-                <img src={srLogo} alt="Street Roots Home" />
-              </a>
-            </div>
-            <div className="rcr-logo">
-              <NavLink
-                exact
-                activeClassName="logo-active"
-                to="/"
-                onClick={this.logoDrawerToggle}
-              >
-                <img src={rcrLogo} alt="Rose City Resource Home" />
-              </NavLink>
-            </div>
-            <div className="spacer" />
-            <MediaQuery query="(min-width: 600px)">
-              <NavLink
-                className="nav-item"
-                exact
-                activeClassName="nav-item-active "
-                to="/about"
-              >
-                ABOUT
-              </NavLink>
-              <NavLink
-                className="nav-item"
-                exact
-                activeClassName="nav-item-active "
-                to="/suggest-edit"
-              >
-                SUGGEST UPDATE
-              </NavLink>
-            </MediaQuery>
-            <MediaQuery query="(max-width: 599px)">
-              <div className="hamburger-button">
-                <FontAwesomeIcon
-                  icon="bars"
-                  size="2x"
-                  onClick={this.toggleDrawer}
-                />
-              </div>
-            </MediaQuery>
-          </nav>
-          <MediaQuery query="(max-width: 599.999999px)">
-            <NavDrawer
-              onClick={this.toggleDrawer}
-              navVisible={navDrawerVisible}
-            />
-          </MediaQuery>
-        </header>
-      </div>
-    );
+  const logoDrawerToggle = () => {
+    setNavDrawer(false);
   }
+
+  return (
+    <div className="nav">
+      <header>
+        <nav className="nav-container">
+          <div className="sr-logo">
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href="https://news.streetroots.org/"
+              onClick={logoDrawerToggle}
+            >
+              <img src={srLogo} alt="Street Roots Home" />
+            </a>
+          </div>
+          <div className="rcr-logo">
+            <NavLink
+              exact
+              activeClassName="logo-active"
+              to="/"
+              onClick={logoDrawerToggle}
+            >
+              <img src={rcrLogo} alt="Rose City Resource Home" />
+            </NavLink>
+          </div>
+          <div className="spacer" />
+          <MediaQuery query="(min-width: 600px)">
+            <NavLink
+              className="nav-item"
+              exact
+              activeClassName="nav-item-active "
+              to="/about"
+            >
+              ABOUT
+            </NavLink>
+            <NavLink
+              className="nav-item"
+              exact
+              activeClassName="nav-item-active "
+              to="/suggest-edit"
+            >
+              SUGGEST UPDATE
+            </NavLink>
+          </MediaQuery>
+          <MediaQuery query="(max-width: 599px)">
+            <div className="hamburger-button">
+              <FontAwesomeIcon
+                icon="bars"
+                size="2x"
+                onClick={toggleDrawer}
+              />
+            </div>
+          </MediaQuery>
+        </nav>
+        <MediaQuery query="(max-width: 599.999999px)">
+          <NavDrawer
+            onClick={toggleDrawer}
+            navVisible={navDrawerVisible}
+          />
+        </MediaQuery>
+      </header>
+    </div>
+  );
 }
 
 export default Nav;
