@@ -25,16 +25,13 @@ const Home = props => {
     <section>
       <div className="home-outer-container">
         <div className="home-container">
-          {/* <Logo /> */}
           <div className="basic-search-container">
             <BasicInstructions />
             <SearchBar
-              // label="Search for a Service... "
               nodeData={nodeData}
               searchData={searchData}
             />
           </div>
-          {/* W.8.23.20 QUESTION: should we mark this as nav? It's essentially a secondary nav menu, so I wasn't sure. */}
           <IconSelector
             nodeData={props.nodeData}
             searchData={searchData}

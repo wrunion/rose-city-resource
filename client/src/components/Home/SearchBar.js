@@ -287,6 +287,8 @@ export default class SearchBar extends React.Component {
           {/* W.8.23.20 QUESTION: how can we change this to handle multiple search terms? or misspellings, alternate capitalization, etc? 
           
           right now it only works if a single search term is spelled exactly correctly, with the words in order. for example, we have both Spanish language services, and mental health services in the database, but "spanish mental health" has 0 matches. What's the best way to fix this? */}
+
+          {/* https://rosecityresource.streetroots.org/api/listings-resource */}
           <LinkButton
             className="search-button"
             to={`/results?search=${searchValue}`}
