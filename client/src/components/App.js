@@ -3,6 +3,7 @@ import Loading from "./Loading";
 import Home from "./Home/Home";
 import About from "./About";
 import SuggestEdit from "./SuggestEdit";
+import WildfireMap from './WildfireMap';
 import Results from "./Results/Results";
 import Details from "./Details";
 import Nav from "./Navbar/Nav";
@@ -110,6 +111,7 @@ class App extends React.Component {
                     )}
                   />
                   <Route exact path="/about" component={About} />
+                  <Route exact path="/wildfire-map" component={WildfireMap} />
                   <Route exact path="/suggest-edit" component={SuggestEdit} />
                   <Route
                     path="/results"

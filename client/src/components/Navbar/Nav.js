@@ -7,12 +7,6 @@ import * as rcrLogo from "./../../images/rcr-logo.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { CSSTransition } from "react-transition-group";
 
-const onWildfireClick = () => {
-  /* TODO: put WILFIRE MAP redirect info here */
-  /* also, put this function somewhere more appropriate */
-  console.log('wildfire click');
-}
-
 const NavDrawer = ({ navVisible, onClick }) => (
 
   <CSSTransition
@@ -43,12 +37,14 @@ const NavDrawer = ({ navVisible, onClick }) => (
             SUGGEST UPDATE
           </NavLink>
           {/* WILDFIRE MAP LINK  */}
-          <div
-            className="nav-drawer-item-wildfire"
-            onClick={onWildfireClick} 
+          <NavLink
+            className="nav-drawer-item"
+            exact
+            to="/wildfire-map"
+            onClick={onClick} 
             >
             WILDFIRE MAP
-          </div>
+          </NavLink>
         </div>
       );
     }}
@@ -111,13 +107,14 @@ class Nav extends React.Component {
               >
                 SUGGEST UPDATE
               </NavLink>
-              {/* WILDFIRE MAP LINK  */}
-              <div
-                className="nav-drawer-item-wildfire"
-                onClick={onWildfireClick} 
+              {/* WILDFIRE MAP ROUTE  */}
+              <NavLink
+                className="nav-drawer-item"
+                exact
+                to="/wildfire-map"
                 >
                 WILDFIRE MAP
-              </div>
+              </NavLink>
             </MediaQuery>
             <MediaQuery query="(max-width: 599px)">
               <div className="hamburger-button">
