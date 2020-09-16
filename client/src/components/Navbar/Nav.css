@@ -66,6 +66,19 @@ red/orange:  #F8B500
   transition: color 200ms ease-in;
 }
 
+.nav-drawer-item-wildfire {
+  color:#f8b500;
+  background: #393E46;
+  padding: 10px 15px 10px 5px;
+  transition: color 200ms ease-in;
+}
+
+.nav-drawer-item-wildfire:hover {
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-color: white;
+}
+
 .nav-drawer-item:hover {
   color: #f8b500;
 }
@@ -119,4 +132,3 @@ red/orange:  #F8B500
   flex-direction: column;
   height: 80px;
 }
-
