@@ -2,6 +2,7 @@ import React from "react";
 import * as srLogo from "./../images/sr-logo-transparent-background.png";
 import "./../css/About.css";
 
+/* this needs a back button */
 const About = (props) => (
   <main className="main-container">
     <div className="about-container">

@@ -44,77 +44,78 @@ const NavDrawer = ({ navVisible, onClick }) => (
 
 /* 9.19.20: refactored to functional component w/hooks */
 const Nav = () => {
-
-  const [navDrawerVisible, changeNavDrawerVisibility] = useState(false);
+  const [navDrawerVisible, setNavDrawer] = useState(false); 
 
   const toggleDrawer = () => {
-    changeNavDrawerVisibility(!navDrawerVisible);
+    setNavDrawer(!navDrawerVisible);
   };
 
-  const logoDrawerToggle = () => { changeNavDrawerVisibility(false); }
-
-    return (
-      <div className="nav">
-        <header>
-          <nav className="nav-container">
-            <div className="sr-logo">
-              <a
-                target="_blank"
-                rel="noopener noreferrer"
-                href="https://news.streetroots.org/"
-                onClick={logoDrawerToggle}
-              >
-                <img src={srLogo} alt="Street Roots Home" />
-              </a>
-            </div>
-            <div className="rcr-logo">
-              <NavLink
-                exact
-                activeClassName="logo-active"
-                to="/"
-                onClick={logoDrawerToggle}
-              >
-                <img src={rcrLogo} alt="Rose City Resource Home" />
-              </NavLink>
-            </div>
-            <div className="spacer" />
-            <MediaQuery query="(min-width: 600px)">
-              <NavLink
-                className="nav-item"
-                exact
-                activeClassName="nav-item-active "
-                to="/about"
-              >
-                ABOUT
-              </NavLink>
-              <NavLink
-                className="nav-item"
-                exact
-                activeClassName="nav-item-active "
-                to="/suggest-edit"
-              >
-                SUGGEST UPDATE
-              </NavLink>
-            </MediaQuery>
-            <MediaQuery query="(max-width: 599px)">
-              <div className="hamburger-button">
-                <FontAwesomeIcon
-                  icon="bars"
-                  size="2x"
-                  onClick={toggleDrawer}
-                />
-              </div>
-            </MediaQuery>
-          </nav>
-          <MediaQuery query="(max-width: 599.999999px)">
-            <NavDrawer
-              onClick={toggleDrawer}
-              navVisible={navDrawerVisible}
-            />
-          </MediaQuery>
-        </header>
-      </div>
-    );
+  const logoDrawerToggle = () => {
+    setNavDrawer(false);
   }
+
+  return (
+    <div className="nav">
+      <header>
+        <nav className="nav-container">
+          <div className="sr-logo">
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href="https://news.streetroots.org/"
+              onClick={logoDrawerToggle}
+            >
+              <img src={srLogo} alt="Street Roots Home" />
+            </a>
+          </div>
+          <div className="rcr-logo">
+            <NavLink
+              exact
+              activeClassName="logo-active"
+              to="/"
+              onClick={logoDrawerToggle}
+            >
+              <img src={rcrLogo} alt="Rose City Resource Home" />
+            </NavLink>
+          </div>
+          <div className="spacer" />
+          <MediaQuery query="(min-width: 600px)">
+            <NavLink
+              className="nav-item"
+              exact
+              activeClassName="nav-item-active "
+              to="/about"
+            >
+              ABOUT
+            </NavLink>
+            <NavLink
+              className="nav-item"
+              exact
+              activeClassName="nav-item-active "
+              to="/suggest-edit"
+            >
+              SUGGEST UPDATE
+            </NavLink>
+          </MediaQuery>
+          <MediaQuery query="(max-width: 599px)">
+            <div className="hamburger-button">
+              <FontAwesomeIcon
+                icon="bars"
+                size="2x"
+                onClick={toggleDrawer}
+              />
+            </div>
+          </MediaQuery>
+        </nav>
+        <MediaQuery query="(max-width: 599.999999px)">
+          <NavDrawer
+            onClick={toggleDrawer}
+            navVisible={navDrawerVisible}
+          />
+        </MediaQuery>
+      </header>
+    </div>
+  );
+}
 
 export default Nav;
