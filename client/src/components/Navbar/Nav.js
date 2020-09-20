@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import MediaQuery from "react-responsive";
 import { NavLink } from "react-router-dom";
 import "./Nav.css";
@@ -36,34 +36,22 @@ const NavDrawer = ({ navVisible, onClick }) => (
           >
             SUGGEST UPDATE
           </NavLink>
-          {/* WILDFIRE MAP LINK  */}
-          <NavLink
-            className="nav-drawer-item"
-            exact
-            to="/wildfire-map"
-            onClick={onClick} 
-            >
-            WILDFIRE MAP
-          </NavLink>
         </div>
       );
     }}
   </CSSTransition>
 );
 
-class Nav extends React.Component {
-  state = {
-    navDrawerVisible: false,
+/* 9.19.20: refactored to functional component w/hooks */
+const Nav = () => {
+
+  const [navDrawerVisible, changeNavDrawerVisibility] = useState(false);
+
+  const toggleDrawer = () => {
+    changeNavDrawerVisibility(!navDrawerVisible);
   };
 
-  toggleDrawer = () => {
-    this.setState(() => ({ navDrawerVisible: !this.state.navDrawerVisible }));
-  };
-
-  logoDrawerToggle = () => this.setState(() => ({ navDrawerVisible: false }));
-
-  render() {
-    const { navDrawerVisible } = this.state;
+  const logoDrawerToggle = () => { changeNavDrawerVisibility(false); }
 
     return (
       <div className="nav">
@@ -74,7 +62,7 @@ class Nav extends React.Component {
                 target="_blank"
                 rel="noopener noreferrer"
                 href="https://news.streetroots.org/"
-                onClick={this.logoDrawerToggle}
+                onClick={logoDrawerToggle}
               >
                 <img src={srLogo} alt="Street Roots Home" />
               </a>
@@ -84,7 +72,7 @@ class Nav extends React.Component {
                 exact
                 activeClassName="logo-active"
                 to="/"
-                onClick={this.logoDrawerToggle}
+                onClick={logoDrawerToggle}
               >
                 <img src={rcrLogo} alt="Rose City Resource Home" />
               </NavLink>
@@ -107,28 +95,20 @@ class Nav extends React.Component {
               >
                 SUGGEST UPDATE
               </NavLink>
-              {/* WILDFIRE MAP ROUTE  */}
-              <NavLink
-                className="nav-drawer-item"
-                exact
-                to="/wildfire-map"
-                >
-                WILDFIRE MAP
-              </NavLink>
             </MediaQuery>
             <MediaQuery query="(max-width: 599px)">
               <div className="hamburger-button">
                 <FontAwesomeIcon
                   icon="bars"
                   size="2x"
-                  onClick={this.toggleDrawer}
+                  onClick={toggleDrawer}
                 />
               </div>
             </MediaQuery>
           </nav>
           <MediaQuery query="(max-width: 599.999999px)">
             <NavDrawer
-              onClick={this.toggleDrawer}
+              onClick={toggleDrawer}
               navVisible={navDrawerVisible}
             />
           </MediaQuery>
@@ -136,6 +116,5 @@ class Nav extends React.Component {
       </div>
     );
   }
-}
 
 export default Nav;

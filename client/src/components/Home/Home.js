@@ -3,10 +3,6 @@ import PropTypes from 'prop-types';
 import IconSelector from './IconSelector';
 import SearchBar from './SearchBar';
 import './Home.css';
-import { Link } from 'react-router-dom';
-import BigRedButton from './../../images/bigRedButton.png';
-
-/*---------------------------------------------------------*/
 
 const BasicInstructions = props => {
   return (
@@ -17,7 +13,6 @@ const BasicInstructions = props => {
   );
 };
 
-/*---------------------------------------------------------*/
 const Home = props => {
 
     const { searchData, nodeData } = props; //grab match from React Router to pass to any of the links that need it.
@@ -28,10 +23,6 @@ const Home = props => {
         <div className="home-container">
           <div className="basic-search-container">
             <BasicInstructions />
-              <img 
-                className='EmergencyButton' 
-                src={BigRedButton} 
-                alt="Click for Emergency Wildfire Resources" />
             <SearchBar
               //"Search for a Service... "
               nodeData={nodeData}
