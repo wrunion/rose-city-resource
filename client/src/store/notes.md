@@ -5,10 +5,10 @@
 Q: Which pieces of state should we convert to Redux? 
 
 * The four state slices in App are:    
-    * navDrawerVisible
+    * navDrawerVisible [ x ]
     * nodeData
     * searchData
-    * savedDataI
+    * savedData
 * My goal/this plan will be to convert those four into Redux-managed state.
 * Smaller pieces of component-specific state can stay where they are. These four are enough.
 

@@ -14,7 +14,7 @@ const BasicInstructions = props => {
 };
 
 const Home = props => {
-
+  /* where is this call actually being made?? */
     const { searchData, nodeData } = props; //grab match from React Router to pass to any of the links that need it.
     
     return (
