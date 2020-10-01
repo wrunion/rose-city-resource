@@ -14,24 +14,26 @@ require("./routes/package")(app);
 require("./routes/listings")(app);
 require("./routes/phone")(app);
 
-// API REQUESTS
-const fetch = require('node-fetch');
-
-async function getNODEData() {
+/*---- kent and winter's test logic 9.20.20 ----*/
+const fetch = require("node-fetch");
+export async function getNODEData(uri) {
   try {
-    const uri = "https://opendata.imspdx.org/api/3/action/datastore_search_sql?sql=SELECT%20*%20from%20%2261cee891-7d0f-4ebe-b8ea-c0c8d6cb27e7%22'";
-    const phoneResponse = await fetch(uri);
-    const phoneJson = await phoneResponse.json();
-    const phoneData = await phoneJson.result.records;
-
-    return phoneData;
+    const response = await fetch(uri);
+    const jsonData = await response.json();
+    const data = await jsonData;
+    return data;
   } catch (err) {
     console.log(err);
   }
 }
-    
 
-//production boilerplate
+export const nodeListingsUri = `https://opendata.imspdx.org/api/3/action/datastore_search_sql?sql=SELECT * from "61cee891-7d0f-4ebe-b8ea-c0c8d6cb27e7"`;
+
+export const nodePackageUri = `https://opendata.imspdx.org/api/3/action/package_show?id=592c18db-efa6-44c6-8477-4ffa4103ba94`
+
+export const nodePhoneUri = `https://opendata.imspdx.org/api/3/action/datastore_search_sql?sql=SELECT%20*%20from%20%224407461b-e99d-4d8e-8a44-18483aa8d13c%22`
+/*----------------------------------------------------*/
+
 // if (process.env.NODE_ENV === "production") {
   //make sure express serves up the corret assests
   //like main.js
@@ -41,20 +43,25 @@ async function getNODEData() {
   //this is the catch all code
   const path = require("path");
   app.get("/", (req, res) => {
-    console.log('this shit works');
+    res.send('hello world');
   });
   app.get('/listings_node', (req, res) => {
-    getNODEData()
-    .then((data) => console.log(data))
-    .catch(console.log('error'));
-    // res.send(getNODEData('https://opendata.imspdx.org/api/3/action/datastore_search_sql?sql=SELECT%20*%20from%20%2261cee891-7d0f-4ebe-b8ea-c0c8d6cb27e7%22'));
+    getNODEData(nodeListingsUri)
+    .catch(console.log('error'))
+    .then((data) => res.send(data));  
+  });
+  app.get('/package_node', (req, res) => {
+    getNODEData(nodePackageUri)
+    .catch(console.log('error'))
+    .then((data) => res.send(data));  
+  });
+  app.get('/phone_node', (req, res) => {
+    getNODEData(nodePhoneUri)
+    .catch(console.log('error'))
+    .then((data) => res.send(data));  
   });
 
 // }
-
-
-
-// https://opendata.imspdx.org/api/3/action/datastore_search_sql?sql=SELECT%20*%20from%20%2261cee891-7d0f-4ebe-b8ea-c0c8d6cb27e7%22
 
 //heroku dynamic port binding
 const PORT = process.env.PORT || 5100;
