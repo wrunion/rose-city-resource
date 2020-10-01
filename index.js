@@ -20,11 +20,8 @@ const fetch = require('node-fetch');
 
 async function getNODEData() {
   try {
-    console.log('getNODEData');
     const uri = `https://opendata.imspdx.org/api/3/action/datastore_search_sql?sql=SELECT * from "61cee891-7d0f-4ebe-b8ea-c0c8d6cb27e7"`;
-    console.log(uri);
     const phoneResponse = await fetch(uri);
-    console.log('ph:' + phoneResponse);
     const phoneJson = await phoneResponse.json();
     const phoneData = await phoneJson;
     return phoneData;
@@ -45,9 +42,9 @@ async function getNODEData() {
   //this is the catch all code
   
   app.get("/", (req, res) => {
-    res.send('hello world');
+    res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
   });
-  
+
   app.get('/listings_node', (req, res) => {
     console.log('/listings_node');
     getNODEData()
