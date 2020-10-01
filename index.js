@@ -14,8 +14,25 @@ require("./routes/package")(app);
 require("./routes/listings")(app);
 require("./routes/phone")(app);
 
+// API REQUESTS
+const fetch = require('node-fetch');
+
+async function getNODEData() {
+  try {
+    const uri = "https://opendata.imspdx.org/api/3/action/datastore_search_sql?sql=SELECT%20*%20from%20%2261cee891-7d0f-4ebe-b8ea-c0c8d6cb27e7%22'";
+    const phoneResponse = await fetch(uri);
+    const phoneJson = await phoneResponse.json();
+    const phoneData = await phoneJson.result.records;
+
+    return phoneData;
+  } catch (err) {
+    console.log(err);
+  }
+}
+    
+
 //production boilerplate
-//if (process.env.NODE_ENV === "production") {
+// if (process.env.NODE_ENV === "production") {
   //make sure express serves up the corret assests
   //like main.js
   app.use(express.static("client/build"));
@@ -23,11 +40,21 @@ require("./routes/phone")(app);
   //serve up index.html
   //this is the catch all code
   const path = require("path");
-  app.get("*", (req, res) => {
-    //res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
-    res.send("Hello world");
+  app.get("/", (req, res) => {
+    console.log('this shit works');
   });
-//}
+  app.get('/listings_node', (req, res) => {
+    getNODEData()
+    .then((data) => console.log(data))
+    .catch(console.log('error'));
+    // res.send(getNODEData('https://opendata.imspdx.org/api/3/action/datastore_search_sql?sql=SELECT%20*%20from%20%2261cee891-7d0f-4ebe-b8ea-c0c8d6cb27e7%22'));
+  });
+
+// }
+
+
+
+// https://opendata.imspdx.org/api/3/action/datastore_search_sql?sql=SELECT%20*%20from%20%2261cee891-7d0f-4ebe-b8ea-c0c8d6cb27e7%22
 
 //heroku dynamic port binding
 const PORT = process.env.PORT || 5100;
