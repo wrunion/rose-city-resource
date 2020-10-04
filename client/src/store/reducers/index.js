@@ -1,5 +1,8 @@
+import nodeData from './nodeData';
+import searchData from './searchData';
 import { combineReducers } from "redux";
 
 export default combineReducers({
-  rootReducer: 123
+  nodeData: nodeData,
+  searchData: searchData,
 });

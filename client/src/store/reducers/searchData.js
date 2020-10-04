@@ -1,4 +1,4 @@
-import { SET_SEARCH_DATA } from "./../actions/searchData";
+import { SET_SEARCH_DATA } from "../actions/searchData";
 
 const initialSearchData = null;
 
