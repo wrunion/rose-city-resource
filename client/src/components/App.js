@@ -13,7 +13,7 @@ import {
   getPackageData,
   getCategorySearchData,
   getMainSearchData,
-  dateString,
+  dateString, PACKAGE_DATA
 } from "../utils/api";
 import "../icons/iconsInit";
 

@@ -4,6 +4,7 @@ import fetch from "node-fetch";
 // ASYNC DATA UTLS--------------------------------------------------------
 //async function to fetch revision history
 //based on rose-city-resource
+
 export async function getPackageData() {
   const uri = "/api/package";
   const packageData = await fetch(uri)
@@ -279,11 +280,10 @@ function getFilteredCatParentData(categoryVal, parentVal, nodeData) {
   return filteredNodeData.filter((el) => el !== null);
 }
 
-/* W 10.4: Is this being used?? */
 //check if a search value is in the NODE record
-//this function is gonna be used for individual searches
 //helper for getFilteredNodeData
-function getFilteredSearchData(searchValue, nodeData) {
+
+function getFilteredSearchData(val, nodeData) {
 
   const filterData = nodeData.map((record) => {
     const recordValsLower = Object.values(record).map(
