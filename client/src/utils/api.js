@@ -103,18 +103,17 @@ export function getFilteredSearchList(searchCats, nodeData) {
 
 //functions to set up category search data
 export function getCategorySearchData(nodeData, category) {
-  const genCats = nodeData.map((record) => {
+  const parentCategories = nodeData.map((record) => {
     const generalRecord = record[category];
     return generalRecord;
   });
-  const filteredGenCats = genCats.filter((cat) => cat !== "NA");
+  const filteredparentCategories = parentCategories.filter((cat) => cat !== "NA");
 
-  return countDuplicates(filteredGenCats);
+  return countDuplicates(filteredparentCategories);
 }
 
 export function getMainSearchData(nodeData) {
-  // these will eventually need to be added in dynamically
-  const genCats = [
+  const parentCategories = [
     "Food",
     "Housing & Shelter",
     "Goods",
@@ -128,26 +127,25 @@ export function getMainSearchData(nodeData) {
     "Specialized Assistance",
   ];
 
-  const mainCats = genCats.map((cat, i) => {
+  const subCategories = parentCategories.map((cat) => {
     const filterCats = nodeData.filter(
       (record) => record.general_category === cat
     );
     return filterCats;
   });
 
-  const mainCatsCount = mainCats.map((cat, i) => {
+  const subCategoriesCount = subCategories.map((cat) => {
     const catVals = cat.map((c) => {
       return c["main_category"];
     });
     return countDuplicates(catVals);
   });
 
-  const mainCategory = genCats.reduce(
-    (o, k, i) => ({ ...o, [k]: mainCatsCount[i] }),
+  const subCategory = parentCategories.reduce(
+    (o, k, i) => ({ ...o, [k]: subCategoriesCount[i] }),
     {}
   );
-
-  return mainCategory;
+  return subCategory;
 }
 
 //function to return phone records obejct in
@@ -174,7 +172,6 @@ export function cardTextFilter(recordKey) {
 }
 
 export function cardWebAddressFixer(webAddress) {
-  // if(address.indexOf("http") > 0)
   const webAddressFilter = cardTextFilter(webAddress);
   if (webAddress.indexOf("http") < 0 && webAddressFilter !== "") {
     return `http://${webAddressFilter}`;
@@ -252,7 +249,6 @@ function getCenter(latArr, lonArr, defaultArr) {
 //helper for getFilteredNodeData
 function getFilteredCatParentData(categoryVal, parentVal, nodeData) {
   const checkVals = [
-    // ...handleArray(searchVal),
     ...handleArray(categoryVal),
     ...handleArray(parentVal),
   ].filter((el) => el !== null);
@@ -283,24 +279,21 @@ function getFilteredCatParentData(categoryVal, parentVal, nodeData) {
   return filteredNodeData.filter((el) => el !== null);
 }
 
+/* W 10.4: Is this being used?? */
 //check if a search value is in the NODE record
 //this function is gonna be used for individual searches
 //helper for getFilteredNodeData
 function getFilteredSearchData(searchValue, nodeData) {
-  //Polyfill from SO to use toLowerCase()
-  if (!String.toLowerCase) {
-    String.toLowerCase = function (s) {
-      return String(s).toLowerCase();
-    };
-  }
 
   const filterData = nodeData.map((record) => {
     const recordValsLower = Object.values(record).map(
       (val) => {
-        return String(val).toLowerCase();
-      } //I miss R
+
+        return val.toLowerCase();
+      } 
     );
-    if (recordValsLower.join(" ").includes(String(searchValue).toLowerCase())) {
+    console.log(recordValsLower);
+    if (recordValsLower.join(" ").includes(val.toLowerCase())) {
       record.directionsUrl = directionsUrlBuilder(
         record.street,
         record.city,
