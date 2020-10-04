@@ -17,6 +17,11 @@ import {
 } from "../utils/api";
 import "../icons/iconsInit";
 
+/* REDUX REFACTOR 10.4.20 */ 
+import { connect } from 'react-redux';
+import nodeData, { SET_NODE_DATA } from './../store/actions/nodeData';
+import searchData, { SET_SEARCH_DATA } from './../store/actions/searchData';
+
 class App extends React.Component {
   state = {
     navDrawerVisible: false,
@@ -144,4 +149,8 @@ class App extends React.Component {
   }
 }
 
-export default App;
+const mapStateToProps = state => {
+  return { searchData, nodeData }
+}
+
+export default connect(mapStateToProps, { searchData, nodeData })(App);

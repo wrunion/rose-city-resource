@@ -4,8 +4,8 @@ import fetch from "node-fetch";
 // ASYNC DATA UTLS--------------------------------------------------------
 //async function to fetch revision history
 //based on rose-city-resource
-
 export async function getPackageData() {
+  ///new logic
   const uri = "/api/package";
   const packageData = await fetch(uri)
     .catch(handleError)
@@ -20,6 +20,7 @@ export async function getNodeData() {
     const listingsResponse = await fetch(uri);
     const listingsJson = await listingsResponse.json();
     const listingsData = await listingsJson.result.records;
+
     //get the NODE phone table
     const phoneData = await getPhoneData();
 
@@ -74,26 +75,27 @@ export function dateString(utcString) {
 //values from any of the search options (listing, parent_org, main_category)
 //this function uses helper functions
 export function getNodeFilteredData(
-  searchVal,
-  categoryVal,
-  parentVal,
+  searchVals,
+  categoryVals,
+  parentVals,
   nodeData
 ) {
   //if the searchVal is undefined then
   //do this
-  if (searchVal === undefined) {
+  if (searchVals === undefined) {
     const filteredNodeData = getFilteredCatParentData(
-      categoryVal,
-      parentVal,
+      categoryVals,
+      parentVals,
       nodeData
     );
     return filteredNodeData;
   } else {
-    const filteredNodeData = getFilteredSearchData(searchVal, nodeData);
+    const filteredNodeData = getFilteredSearchData(searchVals, nodeData);
     return filteredNodeData;
   }
 }
 
+//this also may not be used
 export function getFilteredSearchList(searchCats, nodeData) {
   const filteredValsList = nodeData.map((record) => {
     return searchCats.map((cat) => record[cat]);
@@ -104,17 +106,18 @@ export function getFilteredSearchList(searchCats, nodeData) {
 
 //functions to set up category search data
 export function getCategorySearchData(nodeData, category) {
-  const parentCategories = nodeData.map((record) => {
+  const genCats = nodeData.map((record) => {
     const generalRecord = record[category];
     return generalRecord;
   });
-  const filteredparentCategories = parentCategories.filter((cat) => cat !== "NA");
+  const filteredGenCats = genCats.filter((cat) => cat !== "NA");
 
-  return countDuplicates(filteredparentCategories);
+  return countDuplicates(filteredGenCats);
 }
 
 export function getMainSearchData(nodeData) {
-  const parentCategories = [
+  // these will eventually need to be added in dynamically
+  const genCats = [
     "Food",
     "Housing & Shelter",
     "Goods",
@@ -128,25 +131,26 @@ export function getMainSearchData(nodeData) {
     "Specialized Assistance",
   ];
 
-  const subCategories = parentCategories.map((cat) => {
+  const mainCats = genCats.map((cat, i) => {
     const filterCats = nodeData.filter(
       (record) => record.general_category === cat
     );
     return filterCats;
   });
 
-  const subCategoriesCount = subCategories.map((cat) => {
+  const mainCatsCount = mainCats.map((cat, i) => {
     const catVals = cat.map((c) => {
       return c["main_category"];
     });
     return countDuplicates(catVals);
   });
 
-  const subCategory = parentCategories.reduce(
-    (o, k, i) => ({ ...o, [k]: subCategoriesCount[i] }),
+  const mainCategory = genCats.reduce(
+    (o, k, i) => ({ ...o, [k]: mainCatsCount[i] }),
     {}
   );
-  return subCategory;
+
+  return mainCategory;
 }
 
 //function to return phone records obejct in
@@ -173,6 +177,7 @@ export function cardTextFilter(recordKey) {
 }
 
 export function cardWebAddressFixer(webAddress) {
+  // if(address.indexOf("http") > 0)
   const webAddressFilter = cardTextFilter(webAddress);
   if (webAddress.indexOf("http") < 0 && webAddressFilter !== "") {
     return `http://${webAddressFilter}`;
@@ -248,10 +253,11 @@ function getCenter(latArr, lonArr, defaultArr) {
 
 //check if parent or category vals in records
 //helper for getFilteredNodeData
-function getFilteredCatParentData(categoryVal, parentVal, nodeData) {
+function getFilteredCatParentData(categoryVals, parentVals, nodeData) {
   const checkVals = [
-    ...handleArray(categoryVal),
-    ...handleArray(parentVal),
+    // ...handleArray(searchVals),
+    ...handleArray(categoryVals),
+    ...handleArray(parentVals),
   ].filter((el) => el !== null);
 
   const filteredNodeData = nodeData.filter((record) => {
@@ -281,19 +287,23 @@ function getFilteredCatParentData(categoryVal, parentVal, nodeData) {
 }
 
 //check if a search value is in the NODE record
+//this function is gonna be used for individual searches
 //helper for getFilteredNodeData
-
-function getFilteredSearchData(val, nodeData) {
+function getFilteredSearchData(searchValue, nodeData) {
+  //Polyfill from SO to use toLowerCase()
+  if (!String.toLowerCase) {
+    String.toLowerCase = function (s) {
+      return String(s).toLowerCase();
+    };
+  }
 
   const filterData = nodeData.map((record) => {
     const recordValsLower = Object.values(record).map(
       (val) => {
-
-        return val.toLowerCase();
-      } 
+        return String(val).toLowerCase();
+      } //I miss R
     );
-    console.log(recordValsLower);
-    if (recordValsLower.join(" ").includes(val.toLowerCase())) {
+    if (recordValsLower.join(" ").includes(String(searchValue).toLowerCase())) {
       record.directionsUrl = directionsUrlBuilder(
         record.street,
         record.city,
@@ -380,16 +390,16 @@ export function objectKeyByValue(obj, val) {
 
 //make a query builder that will be passed to react router
 //parameter expect an array
-export function queryBuilder(categoryVal, parentVal) {
+export function queryBuilder(categoryVals, parentVals) {
   let categoryString = "";
   let parentString = "";
 
-  for (let i = 0; i < categoryVal.length; i++) {
-    categoryString += `category=${encodeURIComponent(categoryVal[i])}&`;
+  for (let i = 0; i < categoryVals.length; i++) {
+    categoryString += `category=${encodeURIComponent(categoryVals[i])}&`;
   }
 
-  for (let i = 0; i < parentVal.length; i++) {
-    parentString += `parent=${encodeURIComponent(parentVal[i])}&`;
+  for (let i = 0; i < parentVals.length; i++) {
+    parentString += `parent=${encodeURIComponent(parentVals[i])}&`;
   }
 
   const queryString = `?${categoryString}${parentString}`;
