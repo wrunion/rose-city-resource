@@ -18,7 +18,6 @@ import {
 import "../icons/iconsInit";
 
 class App extends React.Component {
-  //data lives in the top component.
   state = {
     navDrawerVisible: false,
     nodeData: null,
@@ -31,9 +30,7 @@ class App extends React.Component {
   //this may need to be moved down to results
   handleCardSave = (id) => {
     const { savedDataId } = this.state;
-    // console.log('current saved state: ', savedDataId);
     if (savedDataId.indexOf(id) === -1) {
-      //build up the state array without directly mutating state
       this.setState((prevState) => ({
         savedDataId: [...prevState.savedDataId, id],
       }));
@@ -46,7 +43,7 @@ class App extends React.Component {
   handleSaveDelete = () => {
     this.setState(() => ({ savedDataId: [] }));
   };
-  // build the searching data
+
   filterData = (nodeData) => {
     const generalCategories = getCategorySearchData(
       nodeData,
@@ -57,7 +54,7 @@ class App extends React.Component {
       "parent_organization"
     );
     const mainCategories = getMainSearchData(nodeData);
-    // return a new object with the search data
+
     return {
       general: generalCategories,
       main: mainCategories,
@@ -71,18 +68,15 @@ class App extends React.Component {
     }));
 
   componentDidMount = async () => {
-    // window.addEventListener('resize', this.resize);
-    //package/revision data
     const packageData = await getPackageData();
     this.revisionDate = dateString(
-      // packageData.result.results[0].metadata_modified
       packageData.result.metadata_modified
     );
 
-    //nodeData
     const nodeData = await getNodeData();
     const searchData = this.filterData(nodeData);
     console.log(searchData)
+    console.log(nodeData);
     this.setState(() => ({ nodeData, searchData }));
   };
 

@@ -5,7 +5,6 @@ import fetch from "node-fetch";
 //async function to fetch revision history
 //based on rose-city-resource
 export async function getPackageData() {
-  ///new logic
   const uri = "/api/package";
   const packageData = await fetch(uri)
     .catch(handleError)
@@ -20,7 +19,6 @@ export async function getNodeData() {
     const listingsResponse = await fetch(uri);
     const listingsJson = await listingsResponse.json();
     const listingsData = await listingsJson.result.records;
-
     //get the NODE phone table
     const phoneData = await getPhoneData();
 
@@ -75,27 +73,26 @@ export function dateString(utcString) {
 //values from any of the search options (listing, parent_org, main_category)
 //this function uses helper functions
 export function getNodeFilteredData(
-  searchVals,
-  categoryVals,
-  parentVals,
+  searchVal,
+  categoryVal,
+  parentVal,
   nodeData
 ) {
   //if the searchVal is undefined then
   //do this
-  if (searchVals === undefined) {
+  if (searchVal === undefined) {
     const filteredNodeData = getFilteredCatParentData(
-      categoryVals,
-      parentVals,
+      categoryVal,
+      parentVal,
       nodeData
     );
     return filteredNodeData;
   } else {
-    const filteredNodeData = getFilteredSearchData(searchVals, nodeData);
+    const filteredNodeData = getFilteredSearchData(searchVal, nodeData);
     return filteredNodeData;
   }
 }
 
-//this also may not be used
 export function getFilteredSearchList(searchCats, nodeData) {
   const filteredValsList = nodeData.map((record) => {
     return searchCats.map((cat) => record[cat]);
@@ -253,11 +250,11 @@ function getCenter(latArr, lonArr, defaultArr) {
 
 //check if parent or category vals in records
 //helper for getFilteredNodeData
-function getFilteredCatParentData(categoryVals, parentVals, nodeData) {
+function getFilteredCatParentData(categoryVal, parentVal, nodeData) {
   const checkVals = [
-    // ...handleArray(searchVals),
-    ...handleArray(categoryVals),
-    ...handleArray(parentVals),
+    // ...handleArray(searchVal),
+    ...handleArray(categoryVal),
+    ...handleArray(parentVal),
   ].filter((el) => el !== null);
 
   const filteredNodeData = nodeData.filter((record) => {
@@ -390,16 +387,16 @@ export function objectKeyByValue(obj, val) {
 
 //make a query builder that will be passed to react router
 //parameter expect an array
-export function queryBuilder(categoryVals, parentVals) {
+export function queryBuilder(categoryVal, parentVal) {
   let categoryString = "";
   let parentString = "";
 
-  for (let i = 0; i < categoryVals.length; i++) {
-    categoryString += `category=${encodeURIComponent(categoryVals[i])}&`;
+  for (let i = 0; i < categoryVal.length; i++) {
+    categoryString += `category=${encodeURIComponent(categoryVal[i])}&`;
   }
 
-  for (let i = 0; i < parentVals.length; i++) {
-    parentString += `parent=${encodeURIComponent(parentVals[i])}&`;
+  for (let i = 0; i < parentVal.length; i++) {
+    parentString += `parent=${encodeURIComponent(parentVal[i])}&`;
   }
 
   const queryString = `?${categoryString}${parentString}`;
