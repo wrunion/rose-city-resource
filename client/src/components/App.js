@@ -25,14 +25,9 @@ import searchData, { SET_SEARCH_DATA } from './../store/actions/searchData';
 class App extends React.Component {
   state = {
     navDrawerVisible: false,
-    nodeData: null,
-    searchData: null,
     savedDataId: [],
   };
 
-  //state lisfted from
-  //Cards to keep track of saved cards
-  //this may need to be moved down to results
   handleCardSave = (id) => {
     const { savedDataId } = this.state;
     if (savedDataId.indexOf(id) === -1) {
@@ -78,14 +73,23 @@ class App extends React.Component {
       packageData.result.metadata_modified
     );
 
+    /* GET NODEDATA FROM THE BACKEND, AND PASS TO THE STORE */
+    /* explanation: this calls a redux action, which then passes the data ("payload") to the central Redux store */
     const nodeData = await getNodeData();
+    this.props.nodeData({type: SET_NODE_DATA, payload: nodeData });
+    
+    /* GET SEARCHDATA FROM THE BACKEND, AND PASS TO THE STORE */
+    /* same process as above */
     const searchData = this.filterData(nodeData);
-    console.log(searchData)
-    console.log(nodeData);
+    this.props.searchData({type: SET_SEARCH_DATA, payload: searchData });
+
+    /* THIS WILL BE REPLACED IN A HOT SECOND */
     this.setState(() => ({ nodeData, searchData }));
   };
 
   render() {
+    console.log(this.state.nodeData);
+    console.log(this.state.searchData);
     const { nodeData, searchData, savedDataId } = this.state;
     return (
       <React.Fragment>
@@ -150,7 +154,10 @@ class App extends React.Component {
 }
 
 const mapStateToProps = state => {
-  return { searchData, nodeData }
+  return { 
+    searchData: searchData, 
+    nodeData: nodeData, 
+  }
 }
 
 export default connect(mapStateToProps, { searchData, nodeData })(App);
