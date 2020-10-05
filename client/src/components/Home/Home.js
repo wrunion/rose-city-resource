@@ -1,9 +1,9 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 import IconSelector from './IconSelector';
 import SearchBar from './SearchBar';
 import './../../css/Home.css';
+
+//GET RID OF ALL STATE AND PROPS HERE
 
 const BasicInstructions = props => {
   return (
@@ -16,7 +16,7 @@ const BasicInstructions = props => {
 
 const Home = props => {
 
-    const { searchData, nodeData } = props; //grab match from React Router to pass to any of the links that need it.
+    const { searchData, nodeData } = this.state;
     
     return (
     <section>
@@ -43,8 +43,12 @@ const Home = props => {
   }
 
 
-Home.propTypes = {
-  nodeData: PropTypes.array.isRequired
-};
+const mapStateToProps = state => {
+  return {
+    nodeData: nodeData, 
+    searchData: searchData,
+  }
+}
 
-export default Home;
+export default connect(mapStateToProps, { nodeData, 
+  searchData })(Home);
