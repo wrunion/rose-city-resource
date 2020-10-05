@@ -6,14 +6,14 @@ import { Link } from "react-router-dom";
 import LinkButton from "./LinkButton";
 import './../../css/Home.css';
 import { getFilteredSearchList, queryBuilder } from "../../utils/api";
-
-//need this to use the react portal
-const modalRoot = document.getElementById("modal-root");
-
 /* REDUX REFACTOR 10.4.20 */ 
 import { connect } from 'react-redux';
 import nodeData, { SET_NODE_DATA } from './../../store/actions/nodeData';
 import searchData, { SET_SEARCH_DATA } from './../../store/actions/searchData';
+
+
+//need this to use the react portal
+const modalRoot = document.getElementById("modal-root");
 
 
 class AdvancedSearchModal extends React.Component {

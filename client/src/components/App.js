@@ -17,10 +17,10 @@ import {
 } from "../utils/api";
 import "../icons/iconsInit";
 
-/* REDUX REFACTOR 10.4.20 */ 
-import { connect } from 'react-redux';
-import nodeData, { SET_NODE_DATA } from './../store/actions/nodeData';
-import searchData, { SET_SEARCH_DATA } from './../store/actions/searchData';
+/* REDUX REFACTOR 10.4.2020 */
+import { useDispatch } from 'react-redux';
+import { shallowEqual, useSelector } from 'react-redux'
+import { SET_NODE_DATA, SET_SEARCH_DATA } from './constants';
 
 class App extends React.Component {
   state = {
@@ -73,24 +73,31 @@ class App extends React.Component {
       packageData.result.metadata_modified
     );
 
-    /* GET NODEDATA FROM THE BACKEND, AND PASS TO THE STORE */
-    /* explanation: this calls a redux action, which then passes the data ("payload") to the central Redux store */
+    /* get nodeData from the backend, and pass it to the Redux store via the useDispatch hook */
     const nodeData = await getNodeData();
-    this.props.nodeData({type: SET_NODE_DATA, payload: nodeData });
-    
-    /* GET SEARCHDATA FROM THE BACKEND, AND PASS TO THE STORE */
-    /* same process as above */
-    const searchData = this.filterData(nodeData);
-    this.props.searchData({type: SET_SEARCH_DATA, payload: searchData });
+    useDispatch({type: SET_NODE_DATA, payload: nodeData });
 
+    /* same process as above, but for searchData */
+    const searchData = this.filterData(nodeData);
+    useDispatch({type: SET_SEARCH_DATA, payload: searchData });
+    
     /* THIS WILL BE REPLACED IN A HOT SECOND */
-    this.setState(() => ({ nodeData, searchData }));
+    //this.setState(() => ({ nodeData, searchData }));
   };
 
+  /* REDUX SAMPLE CODE 
+  import { shallowEqual, useSelector } from 'react-redux'
+
+  const selectedData = useSelector(selectorReturningObject, shallowEqual)
+  */
+
   render() {
-    console.log(this.state.nodeData);
-    console.log(this.state.searchData);
-    const { nodeData, searchData, savedDataId } = this.state;
+    const nodeData = useSelector(nodeData, shallowEqual);
+    const searchData = useSelector(searchData, shallowEqual);
+
+    console.log(nodeData);
+    console.log(searchData);
+    const { savedDataId } = this.state;
     return (
       <React.Fragment>
         {!nodeData ? (
@@ -153,11 +160,4 @@ class App extends React.Component {
   }
 }
 
-const mapStateToProps = state => {
-  return { 
-    searchData: searchData, 
-    nodeData: nodeData, 
-  }
-}
-
-export default connect(mapStateToProps, { searchData, nodeData })(App);
+export default App;
